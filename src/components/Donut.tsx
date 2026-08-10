@@ -22,7 +22,14 @@ export default function Donut({ slices, activeKey, onSelect, center }: Props) {
   return (
     <div className="relative mx-auto aspect-square w-[180px] shrink-0">
       <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="size-full -rotate-90">
-        <circle cx={SIZE / 2} cy={SIZE / 2} r={R} fill="none" stroke="#212736" strokeWidth={STROKE} />
+        <circle
+          cx={SIZE / 2}
+          cy={SIZE / 2}
+          r={R}
+          fill="none"
+          stroke="var(--color-ink-700)"
+          strokeWidth={STROKE}
+        />
 
         {visible.map((slice) => {
           const len = (slice.share / 100) * C;

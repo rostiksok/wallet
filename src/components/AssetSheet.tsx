@@ -181,13 +181,19 @@ function Chip({
   children: React.ReactNode;
   color?: string;
 }) {
+  // Колір категорії йде в рамку й підкладку, але не в текст: жовтий чи блакитний
+  // напис читабельний на темному фоні й зникає на світлому.
+  const tinted = active && color;
+
   return (
     <button
       onClick={onClick}
-      style={active && color ? { borderColor: color, color } : undefined}
+      style={tinted ? { borderColor: color, background: `${color}1f` } : undefined}
       className={`flex h-11 items-center rounded-xl border px-3.5 text-[15px] transition active:scale-95 ${
         active
-          ? "border-accent bg-accent/10 font-medium text-accent"
+          ? tinted
+            ? "font-medium text-ink-100"
+            : "border-accent bg-accent/10 font-medium text-accent"
           : "border-ink-700 bg-ink-850 text-ink-300"
       }`}
     >

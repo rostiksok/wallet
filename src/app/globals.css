@@ -23,6 +23,31 @@
   color-scheme: dark;
 }
 
+/*
+ * Світла тема — та сама шкала ink-*, тільки перевернута: 950 стає найсвітлішим
+ * (фон сторінки), 100 — найтемнішим (основний текст). Завдяки цьому bg-ink-900,
+ * text-ink-400 і решта утиліт у компонентах працюють без жодних змін.
+ * data-theme на <html> ставить інлайн-скрипт з lib/theme.ts ще до першого малювання.
+ */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --color-ink-950: #f4f6fb;
+  --color-ink-900: #ffffff;
+  --color-ink-850: #f7f9fd;
+  --color-ink-800: #eef1f8;
+  --color-ink-700: #dee3ef;
+  --color-ink-600: #c2cadb;
+  --color-ink-400: #656e87;
+  --color-ink-300: #454e63;
+  --color-ink-100: #111827;
+
+  /* Зелений з темної теми дає на білому ~1.7:1 — тут потрібен темніший. */
+  --color-accent: #15803d;
+  --color-accent-dim: #166534;
+  --color-danger: #dc2626;
+}
+
 html,
 body {
   background: var(--color-ink-950);
@@ -39,6 +64,26 @@ body {
    */
   overflow-x: clip;
   overscroll-behavior-x: none;
+}
+
+/*
+ * Текст кольором сегмента (--slice). Кольори палітри розраховані на темний фон,
+ * тому у світлій темі підмішуємо чорнило — відтінок лишається впізнаваним,
+ * але напис перестає зливатися з білим.
+ */
+.slice-tint {
+  color: var(--slice);
+}
+:root[data-theme="light"] .slice-tint {
+  color: color-mix(in oklab, var(--slice), #0b1220 42%);
+}
+
+/* Затемнення під bottom sheet: у світлій темі 70% чорного — забагато. */
+.scrim {
+  background: rgb(0 0 0 / 0.7);
+}
+:root[data-theme="light"] .scrim {
+  background: rgb(15 23 42 / 0.32);
 }
 
 /* Числа не «стрибають» при зміні сум. */

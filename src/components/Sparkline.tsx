@@ -22,7 +22,7 @@ export default function Sparkline({ history }: { history: Snapshot[] }) {
   });
 
   const up = values[values.length - 1] >= values[0];
-  const stroke = up ? "#4ade80" : "#fb7185";
+  const stroke = up ? "var(--color-accent)" : "var(--color-danger)";
 
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="h-14 w-full" preserveAspectRatio="none">

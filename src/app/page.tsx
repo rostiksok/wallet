@@ -177,7 +177,10 @@ export default function Page() {
                   center={
                     active ? (
                       <div>
-                        <p className="tnum text-xl font-semibold" style={{ color: active.color }}>
+                        <p
+                          className="slice-tint tnum text-xl font-semibold"
+                          style={{ "--slice": active.color } as React.CSSProperties}
+                        >
                           {formatPercent(active.share)}
                         </p>
                         <p className="mt-0.5 line-clamp-2 text-xs leading-tight text-ink-400">

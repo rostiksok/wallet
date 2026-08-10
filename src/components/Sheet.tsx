@@ -39,7 +39,7 @@ export default function Sheet({ open, onClose, title, subtitle, children, footer
       <button
         aria-label="Закрити"
         onClick={onClose}
-        className="animate-fade-in absolute inset-0 bg-black/70 backdrop-blur-sm"
+        className="scrim animate-fade-in absolute inset-0 backdrop-blur-sm"
       />
       <div
         role="dialog"

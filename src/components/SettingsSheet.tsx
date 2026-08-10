@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import Sheet from "./Sheet";
 import { exportState, importState } from "@/lib/storage";
+import { THEME_OPTIONS, useTheme } from "@/lib/theme";
 import type { WalletState } from "@/lib/types";
 
 type Props = {
@@ -17,6 +18,7 @@ export default function SettingsSheet({ open, onClose, state, onReplace, onReset
   const fileRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
+  const theme = useTheme();
 
   async function handleFile(file: File | undefined) {
     if (!file) return;
@@ -45,6 +47,31 @@ export default function SettingsSheet({ open, onClose, state, onReplace, onReset
       }
     >
       <div className="space-y-3 pb-2">
+        <div className="rounded-2xl border border-ink-700 bg-ink-850 px-4 py-4">
+          <p className="font-medium">Тема</p>
+          <p className="mt-0.5 text-sm text-ink-400">Світла, темна або як у системі</p>
+          <div className="mt-3 grid grid-cols-3 gap-2" role="radiogroup" aria-label="Тема">
+            {THEME_OPTIONS.map((option) => {
+              const active = theme.ready && theme.mode === option.value;
+              return (
+                <button
+                  key={option.value}
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => theme.setMode(option.value)}
+                  className={`h-11 rounded-xl border text-sm transition active:scale-95 ${
+                    active
+                      ? "border-ink-100 bg-ink-100 font-medium text-ink-950"
+                      : "border-ink-700 bg-ink-900 text-ink-300"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         <Row
           title="Експорт у файл"
           hint={`${state.assets.length} активів, ${state.categories.length} категорій`}
