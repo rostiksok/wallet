@@ -186,12 +186,16 @@ export default function Page() {
                         <p className="mt-0.5 line-clamp-2 text-xs leading-tight text-ink-400">
                           {active.label}
                         </p>
-                        <p className="tnum mt-1 text-sm">{mask(formatMoney(active.usd, "USD", true))}</p>
+                        <p className="tnum mt-1 text-sm whitespace-nowrap">
+                          {mask(formatMoney(active.usd, "USD", true))}
+                        </p>
                       </div>
                     ) : (
                       <div>
                         <p className="text-xs text-ink-400">Всього</p>
-                        <p className="tnum text-lg font-semibold">{mask(formatMoney(total, "USD", true))}</p>
+                        <p className="tnum text-lg font-semibold whitespace-nowrap">
+                          {mask(formatMoney(total, "USD", true))}
+                        </p>
                       </div>
                     )
                   }
