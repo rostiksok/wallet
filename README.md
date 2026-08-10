@@ -72,7 +72,9 @@ On first run the app seeds demo assets so you can see what it looks like when fi
 The layout is mobile-first: a single column up to `lg`, then a sticky left column with the
 total and the chart, and the account list on the right. `safe-area-inset` is handled on
 iPhone, forms open from the bottom as a bottom sheet, every interactive element is at least
-44px, and inputs use `font-size: 16px` so iOS doesn't zoom the page on focus.
+44px, and inputs use `font-size: 16px` so iOS doesn't zoom the page on focus. Scrollbars are
+hidden everywhere — page and sheets alike — so it reads as an app rather than a web page;
+scrolling itself is untouched.
 
 ## Theming
 

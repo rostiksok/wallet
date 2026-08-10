@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   applicationName: "Wallet",
   manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "Wallet" },
+  // З appleWebApp Next віддає лише сучасний mobile-web-app-capable. Safari до
+  // iOS 16.4 знає тільки цей префіксований варіант — без нього з домашнього
+  // екрана відкривалася б звичайна вкладка з панеллю знизу.
+  other: { "apple-mobile-web-app-capable": "yes" },
   // Home-screen іконка не має показувати «сторінку в браузері».
   formatDetection: { telephone: false, date: false, address: false, email: false },
 };

@@ -150,7 +150,7 @@ export default function Page() {
 
           {!isEmpty && (
             <>
-              <div className="no-scrollbar -mx-4 mt-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:mt-0 lg:px-0">
+              <div className="-mx-4 mt-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:mt-0 lg:px-0">
                 {MODES.map((m) => (
                   <button
                     key={m.value}
