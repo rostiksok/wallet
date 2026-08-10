@@ -7,6 +7,18 @@ npm install
 npm run dev     # http://localhost:3000
 ```
 
+## Screenshots
+
+Captured at iPhone 12 Pro size (390 × 844 pt, @3x) with the demo data the app seeds on first run.
+
+| Overview | Accounts | New asset |
+| --- | --- | --- |
+| ![Total balance and donut chart by account](docs/screenshots/home.png) | ![List of accounts with per-account totals](docs/screenshots/accounts.png) | ![Bottom sheet for adding an asset](docs/screenshots/asset-sheet.png) |
+
+| Manual rates | Settings | |
+| --- | --- | --- |
+| ![Exchange rates entered by hand](docs/screenshots/rates.png) | ![Export, import and clear data](docs/screenshots/settings.png) | |
+
 ## Features
 
 - **Total balance** in USD, with the hryvnia equivalent underneath.
