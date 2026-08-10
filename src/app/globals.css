@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink-950: #07090f;
+  --color-ink-900: #0b0e16;
+  --color-ink-850: #10141f;
+  --color-ink-800: #161b28;
+  --color-ink-700: #212736;
+  --color-ink-600: #303849;
+  --color-ink-400: #7b869c;
+  --color-ink-300: #a3adc0;
+  --color-ink-100: #e7ebf3;
+
+  --color-accent: #4ade80;
+  --color-accent-dim: #16a34a;
+  --color-danger: #fb7185;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "SF Pro Text", "Segoe UI", Roboto,
+    "Helvetica Neue", sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: var(--color-ink-950);
+  color: var(--color-ink-100);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-sans);
+  /*
+   * clip, а не hidden: `overflow-x: hidden` робить елемент скрол-контейнером,
+   * і на мобільних це з'їдає вертикальний скрол сторінки та ламає sticky.
+   * clip прибирає горизонтальний виліт, не створюючи контейнера прокрутки.
+   */
+  overflow-x: clip;
+  overscroll-behavior-x: none;
+}
+
+/* Числа не «стрибають» при зміні сум. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Приховуємо скролбар у горизонтальних стрічках-табах. */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* iOS: не зумити при фокусі на інпут — тримаємо 16px мінімум. */
+input,
+select,
+textarea,
+button {
+  font-size: 16px;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-sheet-in {
+  animation: sheet-in 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+.animate-rise {
+  animation: rise 0.3s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-sheet-in,
+  .animate-fade-in,
+  .animate-rise {
+    animation: none;
+  }
+}
