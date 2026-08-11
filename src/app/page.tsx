@@ -4,10 +4,10 @@ import { useMemo, useState } from "react";
 import Donut from "@/components/Donut";
 import Sparkline from "@/components/Sparkline";
 import AssetSheet from "@/components/AssetSheet";
-import CategorySheet, { plural } from "@/components/CategorySheet";
+import CategorySheet from "@/components/CategorySheet";
 import RatesSheet from "@/components/RatesSheet";
 import SettingsSheet from "@/components/SettingsSheet";
-import { useWallet } from "@/lib/useWallet";
+import { useWalletState } from "@/lib/walletContext";
 import {
   assetUsd,
   assetsOfCategory,
@@ -17,7 +17,7 @@ import {
   changeOverDays,
   usdToUah,
 } from "@/lib/compute";
-import { formatAmount, formatMoney, formatPercent } from "@/lib/format";
+import { formatAmount, formatMoney, formatPercent, plural } from "@/lib/format";
 import type { Asset, Category } from "@/lib/types";
 
 type Mode = "category" | "currency" | "kind";
@@ -29,7 +29,7 @@ const MODES: { value: Mode; label: string }[] = [
 ];
 
 export default function Page() {
-  const wallet = useWallet();
+  const wallet = useWalletState();
   const { state, ready, total } = wallet;
 
   const [mode, setMode] = useState<Mode>("category");
@@ -77,7 +77,10 @@ export default function Page() {
   return (
     <main
       className="mx-auto w-full max-w-md px-4 lg:max-w-6xl lg:px-8"
-      style={{ paddingBottom: "max(7rem, calc(env(safe-area-inset-bottom) + 6rem))" }}
+      style={{
+        // Знизу фіксовані таб-бар і кнопка «+» — лишаємо місце під обидва.
+        paddingBottom: "max(11rem, calc(env(safe-area-inset-bottom) + 10rem))",
+      }}
     >
       <header
         className="flex items-center justify-between gap-3 py-4"
@@ -379,7 +382,7 @@ export default function Page() {
           onClick={() => setAssetSheet({ open: true, asset: null })}
           aria-label="Додати актив"
           className="fixed right-4 z-40 grid size-14 place-items-center rounded-full bg-accent text-ink-950 shadow-lg shadow-black/40 transition active:scale-90 lg:right-8"
-          style={{ bottom: "max(1.5rem, calc(env(safe-area-inset-bottom) + 1rem))" }}
+          style={{ bottom: "max(5.5rem, calc(env(safe-area-inset-bottom) + 5rem))" }}
         >
           <svg viewBox="0 0 24 24" className="size-7" fill="none" stroke="currentColor" strokeWidth={2.4}>
             <path d="M12 5v14M5 12h14" strokeLinecap="round" />

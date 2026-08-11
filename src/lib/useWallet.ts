@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { initialState } from "./defaults";
 import { loadState, saveState } from "./storage";
 import { totalUsd, withTodaySnapshot } from "./compute";
-import type { Asset, Category, WalletState } from "./types";
+import type { Asset, Category, FopIncome, FopSettings, TaxKind, WalletState } from "./types";
 
 const EMPTY = initialState(false);
 
@@ -67,8 +67,20 @@ export function useWallet() {
     });
   }, []);
 
+  // Разом з активом прибираємо його з рахунків ФОП — інакше в налаштуваннях
+  // лишиться посилання в нікуди.
   const removeAsset = useCallback((id: string) => {
-    setState((prev) => ({ ...prev, assets: prev.assets.filter((a) => a.id !== id) }));
+    setState((prev) => ({
+      ...prev,
+      assets: prev.assets.filter((a) => a.id !== id),
+      fop: {
+        ...prev.fop,
+        settings: {
+          ...prev.fop.settings,
+          accountIds: prev.fop.settings.accountIds.filter((a) => a !== id),
+        },
+      },
+    }));
   }, []);
 
   const upsertCategory = useCallback((category: Category) => {
@@ -104,6 +116,49 @@ export function useWallet() {
     }));
   }, []);
 
+  const upsertIncome = useCallback((income: FopIncome) => {
+    setState((prev) => {
+      const exists = prev.fop.incomes.some((i) => i.id === income.id);
+      return {
+        ...prev,
+        fop: {
+          ...prev.fop,
+          incomes: exists
+            ? prev.fop.incomes.map((i) => (i.id === income.id ? income : i))
+            : [...prev.fop.incomes, income],
+        },
+      };
+    });
+  }, []);
+
+  const removeIncome = useCallback((id: string) => {
+    setState((prev) => ({
+      ...prev,
+      fop: { ...prev.fop, incomes: prev.fop.incomes.filter((i) => i.id !== id) },
+    }));
+  }, []);
+
+  /** Позначка «сплачено» живе на парі квартал+податок: ЄП і ЄСВ платяться різними днями. */
+  const toggleTaxPaid = useCallback((quarterKey: string, kind: TaxKind) => {
+    setState((prev) => {
+      const current = prev.fop.paid[quarterKey] ?? [];
+      const next = current.includes(kind)
+        ? current.filter((k) => k !== kind)
+        : [...current, kind];
+      const paid = { ...prev.fop.paid };
+      if (next.length > 0) paid[quarterKey] = next;
+      else delete paid[quarterKey];
+      return { ...prev, fop: { ...prev.fop, paid } };
+    });
+  }, []);
+
+  const setFopSettings = useCallback((patch: Partial<FopSettings>) => {
+    setState((prev) => ({
+      ...prev,
+      fop: { ...prev.fop, settings: { ...prev.fop.settings, ...patch } },
+    }));
+  }, []);
+
   const replaceState = useCallback((next: WalletState) => setState(next), []);
 
   const reset = useCallback(() => setState(initialState(false)), []);
@@ -117,6 +172,10 @@ export function useWallet() {
     upsertCategory,
     removeCategory,
     setRate,
+    upsertIncome,
+    removeIncome,
+    toggleTaxPaid,
+    setFopSettings,
     replaceState,
     reset,
   };

@@ -1,5 +1,14 @@
-import { DEFAULT_RATES, STATE_VERSION, STORAGE_KEY, initialState } from "./defaults";
-import type { WalletState } from "./types";
+import { DEFAULT_FOP_SETTINGS, DEFAULT_RATES, STATE_VERSION, STORAGE_KEY, initialState } from "./defaults";
+import type { FopState, WalletState } from "./types";
+
+/** Розділ ФОП зʼявився у версії 2 — у старих копіях його просто немає. */
+function mergeFop(fop: Partial<FopState> | undefined): FopState {
+  return {
+    incomes: fop?.incomes ?? [],
+    paid: fop?.paid ?? {},
+    settings: { ...DEFAULT_FOP_SETTINGS, ...(fop?.settings ?? {}) },
+  };
+}
 
 /** Читає стан з localStorage, дозаповнюючи поля, яких могло не бути в старіших версіях. */
 export function loadState(): WalletState | null {
@@ -16,6 +25,7 @@ export function loadState(): WalletState | null {
       rates: { ...DEFAULT_RATES, ...(parsed.rates ?? {}) },
       ratesUpdatedAt: parsed.ratesUpdatedAt ?? Date.now(),
       history: parsed.history ?? [],
+      fop: mergeFop(parsed.fop),
     };
   } catch {
     return null;
@@ -60,5 +70,6 @@ export async function importState(file: File): Promise<WalletState> {
     rates: { ...DEFAULT_RATES, ...(parsed.rates ?? {}) },
     ratesUpdatedAt: parsed.ratesUpdatedAt ?? Date.now(),
     history: parsed.history ?? [],
+    fop: mergeFop(parsed.fop),
   };
 }

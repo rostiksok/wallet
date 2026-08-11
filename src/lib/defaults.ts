@@ -1,7 +1,7 @@
-import type { Asset, Category, Rates, WalletState } from "./types";
+import type { Asset, Category, FopIncome, FopSettings, Rates, WalletState } from "./types";
 
 export const STORAGE_KEY = "wallet.state.v1";
-export const STATE_VERSION = 1;
+export const STATE_VERSION = 2;
 
 export const CURRENCIES: { code: string; label: string; decimals: number }[] = [
   { code: "UAH", label: "Гривня", decimals: 2 },
@@ -50,6 +50,22 @@ export const DEFAULT_CATEGORIES: Category[] = [
   { id: "other", name: "Інше", kind: "other", color: "#94a3b8", emoji: "📦" },
 ];
 
+/**
+ * Мінімальна зарплата на 1 січня 2026 — 8 647 ₴ (Держбюджет-2026). З неї рахуються
+ * і ЄСВ (22% = 1 902,34 ₴/міс), і річний ліміт 3 групи (1167 мінімалок = 10 091 049 ₴).
+ * Змінюється раз на рік — тому не константа в коді, а поле налаштувань.
+ */
+export const MIN_WAGE = 8647;
+
+export const DEFAULT_FOP_SETTINGS: FopSettings = {
+  singleTaxPct: 5,
+  militaryPct: 1,
+  payEsv: true,
+  minWage: MIN_WAGE,
+  bufferPct: 5,
+  accountIds: [],
+};
+
 const now = Date.now();
 
 export const DEMO_ASSETS: Asset[] = [
@@ -62,6 +78,17 @@ export const DEMO_ASSETS: Asset[] = [
   { id: "a7", name: "Гривня вдома", categoryId: "cash", currency: "UAH", amount: 8000, updatedAt: now },
 ];
 
+/**
+ * Демо-надходження прив'язані до «сьогодні», а не до конкретних дат: інакше з часом
+ * вони поїхали б у давно закриті квартали й порожній розділ виглядав би зламаним.
+ */
+export const DEMO_INCOMES: FopIncome[] = [
+  { id: "n1", date: now - 68 * 86_400_000, currency: "USD", amount: 2400, rate: 41.2, note: "Інвойс #7" },
+  { id: "n2", date: now - 37 * 86_400_000, currency: "USD", amount: 2500, rate: 41.4, note: "Інвойс #8" },
+  { id: "n3", date: now - 12 * 86_400_000, currency: "USD", amount: 2650, rate: 41.6, note: "Інвойс #9" },
+  { id: "n4", date: now - 5 * 86_400_000, currency: "UAH", amount: 18000, rate: 1, note: "Локальний клієнт" },
+];
+
 export function initialState(withDemo: boolean): WalletState {
   return {
     version: STATE_VERSION,
@@ -70,5 +97,10 @@ export function initialState(withDemo: boolean): WalletState {
     rates: { ...DEFAULT_RATES },
     ratesUpdatedAt: Date.now(),
     history: [],
+    fop: {
+      incomes: withDemo ? DEMO_INCOMES : [],
+      paid: {},
+      settings: { ...DEFAULT_FOP_SETTINGS },
+    },
   };
 }

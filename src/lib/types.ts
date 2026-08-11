@@ -29,6 +29,41 @@ export type Snapshot = {
   totalUsd: number;
 };
 
+export type TaxKind = "ep" | "vz" | "esv";
+
+/** Надходження на рахунок ФОП — саме дата зарахування визначає квартал і курс. */
+export type FopIncome = {
+  id: string;
+  date: number;
+  currency: CurrencyCode;
+  amount: number;
+  /** Курс НБУ на дату надходження: скільки гривень за 1 одиницю. Для UAH — 1. */
+  rate: number;
+  note?: string;
+};
+
+export type FopSettings = {
+  /** Ставка єдиного податку: 5 — без ПДВ, 3 — з ПДВ. */
+  singleTaxPct: number;
+  militaryPct: number;
+  payEsv: boolean;
+  /** Мінімалка на 1 січня: база і для ЄСВ, і для річного ліміту. */
+  minWage: number;
+  /** Якщо платиш більше мінімального ЄСВ — сума на місяць. Інакше рахуємо з мінімалки. */
+  esvMonthly?: number;
+  /** Запас на курс: долар до дня сплати може здорожчати. */
+  bufferPct: number;
+  /** Активи-рахунки ФОП — з ними порівнюємо резерв. */
+  accountIds: string[];
+};
+
+export type FopState = {
+  incomes: FopIncome[];
+  /** «2026-Q2» → податки цього кварталу, які вже сплачені. */
+  paid: Record<string, TaxKind[]>;
+  settings: FopSettings;
+};
+
 export type WalletState = {
   version: number;
   categories: Category[];
@@ -36,4 +71,5 @@ export type WalletState = {
   rates: Rates;
   ratesUpdatedAt: number;
   history: Snapshot[];
+  fop: FopState;
 };

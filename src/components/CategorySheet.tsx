@@ -3,18 +3,9 @@
 import { useEffect, useState } from "react";
 import Sheet from "./Sheet";
 import { PALETTE } from "@/lib/defaults";
+import { plural } from "@/lib/format";
 import { newId } from "@/lib/useWallet";
 import type { Category, CategoryKind } from "@/lib/types";
-
-/** Українська відмінкова форма: 1 актив, 2 активи, 5 активів. */
-export function plural(n: number, one: string, few: string, many: string) {
-  const abs = Math.abs(n) % 100;
-  const last = abs % 10;
-  if (abs > 10 && abs < 20) return many;
-  if (last > 1 && last < 5) return few;
-  if (last === 1) return one;
-  return many;
-}
 
 const KINDS: { value: CategoryKind; label: string }[] = [
   { value: "bank", label: "Банк" },

@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import TabBar from "@/components/TabBar";
+import { WalletProvider } from "@/lib/walletContext";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
@@ -35,7 +37,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           root layout не має містити ручних head-тегів.
         */}
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
-        {children}
+        <WalletProvider>
+          {children}
+          <TabBar />
+        </WalletProvider>
       </body>
     </html>
   );
